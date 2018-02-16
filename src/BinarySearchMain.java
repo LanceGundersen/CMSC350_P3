@@ -1,8 +1,25 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-import static java.lang.Integer.parseInt;
-
+/*=============================================================================
+ |   Assignment:  Project 3:  Binary Search Tree
+ |       Author:  Lance Gundersen
+ |       Grader:  Prof. Lynda Metallo
+ |
+ |       Course:  CMSC 350
+ |   Instructor:  Lynda Metallo
+ |     Due Date:  18FEB18
+ |
+ |  Description:  A program that performs a sort by using a binary search
+ |                tree. The program should be able to sort lists of integers
+ |                or lists of fractions in either ascending or descending
+ |                order. One set of radio buttons should be used to determine
+ |                whether the lists contain integers or fractions and a
+ |                second set should be used to specify the sort order.
+ |
+ |     Language:  Java 9
+ |
+ *===========================================================================*/
 
 public class BinarySearchMain {
     private JRadioButton ascendingRadioButton, descendingRadioButton;
@@ -46,7 +63,7 @@ public class BinarySearchMain {
                 validateUserSelections();
                 sortButtonAction(entry);
             } catch (GeneralException | NonNumericException e1) {
-                System.out.println(e1);
+                System.out.println("Uncaught Exception: " + e1);
             }
         });
         panel.add(performSortButton);
@@ -87,14 +104,29 @@ public class BinarySearchMain {
     }
 
     private void sortButtonAction(String entry) throws GeneralException {
+        BinarySearchTree binarySearchTree;
+        String values[] = entry.split(" ");
 
+        // TODO: Optimize
         if (fractionRadioButton.isSelected()) {
-            fractionSort(entry);
-        } else {
-            integerSort(entry);
-        }
+            binarySearchTree = new BinarySearchTree(new FractionComparision(values[0]));
 
-        BinarySearchTree binarySearchTree = null;
+            for (int i = 1; i < values.length; i++) {
+                if (values[i].split("/").length > 2) {
+                    throw new GeneralException("Error. Malformed Fraction", "Malformed Fraction");
+                }
+                if (!values[i].contains("/")) {
+                    Integer.parseInt(values[i]);
+                    values[i] = values[i] + "/1";
+                }
+                binarySearchTree.insert(new FractionComparision(values[i]));
+            }
+        } else {
+            binarySearchTree = new BinarySearchTree(Integer.parseInt(values[0]));
+            for (int i = 1; i < values.length; i++) {
+                binarySearchTree.insert(Integer.parseInt(values[i]));
+            }
+        }
         if (ascendingRadioButton.isSelected()) {
             expressionResultField.setText(binarySearchTree.ascendingOrder(binarySearchTree.getRoot()));
         } else {
@@ -124,33 +156,6 @@ public class BinarySearchMain {
         }
         if (!ascendingRadioButton.isSelected() && !descendingRadioButton.isSelected()) {
             throw new GeneralException("Please Select a Sort Type", "No Sort Type");
-        }
-    }
-
-    private void fractionSort(String entry) throws GeneralException {
-        BinarySearchTree<FractionComparision> binarySearchTree;
-        String values[] = entry.split(" ");
-        binarySearchTree = new BinarySearchTree<>(new FractionComparision(values[0]));
-
-        for (int i = 1; i < values.length; i++) {
-            if (values[i].split("/").length > 2) {
-                throw new GeneralException("Error. Malformed Fraction", "Malformed Fraction");
-            }
-            if (!values[i].contains("/")) {
-                parseInt(values[i]);
-                values[i] = values[i] + "/1";
-            }
-            binarySearchTree.insert(new FractionComparision(values[i]));
-        }
-    }
-
-    private void integerSort(String entry) {
-        BinarySearchTree<Integer> binarySearchTree;
-        String values[] = entry.split(" ");
-        binarySearchTree = new BinarySearchTree<>(parseInt(values[0]));
-
-        for (int i = 1; i < values.length; i++) {
-            binarySearchTree.insert(parseInt(values[i]));
         }
     }
 }

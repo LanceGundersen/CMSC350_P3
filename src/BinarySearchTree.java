@@ -1,3 +1,14 @@
+
+/*+----------------------------------------------------------------------
+ ||
+ ||  Class BinarySearchTree
+ ||
+ ||         Author:  Lance Gundersen
+ ||
+ ||        Purpose:  Orders and compares the search nodes.
+ ||
+ ++-----------------------------------------------------------------------*/
+
 class BinarySearchTree<T extends Comparable<T>> {
     private Node<T> root;
     private String text;

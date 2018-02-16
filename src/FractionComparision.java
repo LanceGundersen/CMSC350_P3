@@ -1,3 +1,14 @@
+
+/*+----------------------------------------------------------------------
+ ||
+ ||  Class FractionComparision
+ ||
+ ||         Author:  Lance Gundersen
+ ||
+ ||        Purpose:  Splits the fraction strings and compares them.
+ ||
+ ++-----------------------------------------------------------------------*/
+
 public class FractionComparision implements Comparable<FractionComparision> {
     private String value;
     private int numerator;
