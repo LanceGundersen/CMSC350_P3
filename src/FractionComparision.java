@@ -9,10 +9,14 @@ public class FractionComparision implements Comparable<FractionComparision> {
             this.denominator = 1;
             this.value = numerator + "/" + "1";
         } else {
-            String[] slash = inputString.split("/");
-            this.numerator = Integer.parseInt(slash[0]);
-            this.denominator = Integer.parseInt(slash[1]);
-            this.value = inputString;
+            try {
+                String[] slash = inputString.split("/");
+                this.numerator = Integer.parseInt(slash[0]);
+                this.denominator = Integer.parseInt(slash[1]);
+                this.value = inputString;
+            } catch (Exception e) {
+                throw new NonNumericException("Improperly formatted fraction found!", "Improper Fraction");
+            }
         }
     }
 

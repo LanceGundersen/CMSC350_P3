@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
+import static java.lang.Integer.parseInt;
+
 
 public class BinarySearchMain {
     private JRadioButton ascendingRadioButton, descendingRadioButton;
@@ -85,29 +87,14 @@ public class BinarySearchMain {
     }
 
     private void sortButtonAction(String entry) throws GeneralException {
-        BinarySearchTree binarySearchTree;
-        String values[] = entry.split(" ");
 
-        // TODO: Optimize
         if (fractionRadioButton.isSelected()) {
-            binarySearchTree = new BinarySearchTree(new FractionComparision(values[0]));
-
-            for (int i = 1; i < values.length; i++) {
-                if (values[i].split("/").length > 2) {
-                    throw new GeneralException("Error. Malformed Fraction", "Malformed Fraction");
-                }
-                if (!values[i].contains("/")) {
-                    Integer.parseInt(values[i]);
-                    values[i] = values[i] + "/1";
-                }
-                binarySearchTree.insert(new FractionComparision(values[i]));
-            }
+            fractionSort(entry);
         } else {
-            binarySearchTree = new BinarySearchTree(Integer.parseInt(values[0]));
-            for (int i = 1; i < values.length; i++) {
-                binarySearchTree.insert(Integer.parseInt(values[i]));
-            }
+            integerSort(entry);
         }
+
+        BinarySearchTree binarySearchTree = null;
         if (ascendingRadioButton.isSelected()) {
             expressionResultField.setText(binarySearchTree.ascendingOrder(binarySearchTree.getRoot()));
         } else {
@@ -137,6 +124,33 @@ public class BinarySearchMain {
         }
         if (!ascendingRadioButton.isSelected() && !descendingRadioButton.isSelected()) {
             throw new GeneralException("Please Select a Sort Type", "No Sort Type");
+        }
+    }
+
+    private void fractionSort(String entry) throws GeneralException {
+        BinarySearchTree<FractionComparision> binarySearchTree;
+        String values[] = entry.split(" ");
+        binarySearchTree = new BinarySearchTree<>(new FractionComparision(values[0]));
+
+        for (int i = 1; i < values.length; i++) {
+            if (values[i].split("/").length > 2) {
+                throw new GeneralException("Error. Malformed Fraction", "Malformed Fraction");
+            }
+            if (!values[i].contains("/")) {
+                parseInt(values[i]);
+                values[i] = values[i] + "/1";
+            }
+            binarySearchTree.insert(new FractionComparision(values[i]));
+        }
+    }
+
+    private void integerSort(String entry) {
+        BinarySearchTree<Integer> binarySearchTree;
+        String values[] = entry.split(" ");
+        binarySearchTree = new BinarySearchTree<>(parseInt(values[0]));
+
+        for (int i = 1; i < values.length; i++) {
+            binarySearchTree.insert(parseInt(values[i]));
         }
     }
 }
